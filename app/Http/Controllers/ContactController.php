@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Contact;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
@@ -34,7 +38,14 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Contact::insert([
+                        'user_id' => Auth::id(),
+                        'title' => $request['title'],
+                        'subtitle' => $request['subtitle'],
+                        'description' => $request['description'],
+                        'created_at' => Carbon::now()
+                    ]);
+        return redirect()->route('home');
     }
 
     /**
@@ -56,7 +67,8 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-        //
+        $contact = Contact::where('user_id',Auth::id())->find($id);
+        return view('edit',compact('contact'));
     }
 
     /**
@@ -68,7 +80,13 @@ class ContactController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Contact::where('id', $id)->update([
+                                            'title' => $request['title'],
+                                            'subtitle' => $request['subtitle'],
+                                            'description' => $request['description'],
+                                            'updated_at' => Carbon::now()
+                                        ]);
+        return redirect()->route('home');
     }
 
     /**
@@ -77,8 +95,10 @@ class ContactController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Contact $contact)
     {
-        //
+        $contact->delete();
+        toastr()->addSuccess('Contact Deleted Successfully.');
+        return redirect()->route('home');
     }
 }

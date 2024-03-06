@@ -21,4 +21,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('contact',ContactController::class);
+Route::resource('contact', 'ContactController');
+Route::post('/contact/delete/{contact}', 'ContactController@destroy')->name('contact.destroy');
