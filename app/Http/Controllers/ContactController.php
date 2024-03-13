@@ -43,7 +43,7 @@ class ContactController extends Controller
                         'title' => $request['title'],
                         'subtitle' => $request['subtitle'],
                         'description' => $request['description'],
-                        'created_at' => Carbon::now()
+                        'created_at' => Carbon::now()->toDateTimeString()
                     ]);
         return redirect()->route('home');
     }
@@ -80,11 +80,11 @@ class ContactController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Contact::where('id', $id)->update([
+        Contact::where('_id', $id)->update([
                                             'title' => $request['title'],
                                             'subtitle' => $request['subtitle'],
                                             'description' => $request['description'],
-                                            'updated_at' => Carbon::now()
+                                            'updated_at' => Carbon::now()->toDateTimeString()
                                         ]);
         return redirect()->route('home');
     }
